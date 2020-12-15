@@ -4,6 +4,9 @@ from uszipcode import SearchEngine
 
 import usaddress
 
+from timezonefinder import TimezoneFinder
+
+tf = TimezoneFinder()
 
 app = FastAPI()
 
@@ -22,6 +25,11 @@ def get_zipcode(zipcode: str):
 
 
 import pprint
+
+
+@app.get("/get_tz_from_coords")
+def get_tz_from_coords(lat: float, lng: float):
+    return tf.timezone_at(lng=lng, lat=lat)
 
 
 @app.get("/parse_address")
