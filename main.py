@@ -29,7 +29,9 @@ import pprint
 
 @app.get("/get_tz_from_coords")
 def get_tz_from_coords(lat: float, lng: float):
-    return tf.timezone_at(lng=lng, lat=lat)
+    timezone = tf.timezone_at(lng=lng, lat=lat)
+    print(f"{timezone=}")
+    return timezone
 
 
 @app.get("/parse_address")
