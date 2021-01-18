@@ -40,3 +40,37 @@ def parse_address(address: str):
     if len(parsed) > 1:
         return parsed[0]
     return None
+
+
+from pydantic import BaseModel
+
+
+class Location(BaseModel):
+    lat: float = None
+    lng: float = None
+    city: str = None
+    state_abbr: str = None
+    country_id: int = None
+    country_name: str = None
+    postal_code: str = None
+
+    street_address: str = None
+    unit: str = None
+
+    # TODO this should not be None when this is pushed from the frontend
+    timezone: str = None
+    place_id: str = None
+
+
+from geopy.geocoders import Nominatim
+
+geolocator = Nominatim(user_agent="testing_geos")
+
+
+@app.get("/location_from_city_and_state", response_model=Location)
+def location_from_city_and_state(city: str, state_abbr: str):
+    loc = geolocator.geocode(f"{city}, {state_abbr}")
+    location = Location(
+        lat=loc.latitude, lng=loc.longitude, city=city, state_abbr=state_abbr
+    )
+    return location
